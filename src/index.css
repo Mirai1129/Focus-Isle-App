@@ -416,6 +416,24 @@ body {
   left: 40px;
 }
 
+.welcome-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.logo-image {
+  max-width: 320px;
+  max-height: 320px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
 .sun-face {
   width: 80px;
   height: 80px;
@@ -1482,6 +1500,9 @@ body {
   font-size: 1.5rem;
   animation: 3s ease-in-out infinite sway;
   position: absolute;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
 }
 
 @keyframes sway {

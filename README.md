@@ -126,3 +126,7 @@ This project uses components from:
 
 - [shadcn/ui](https://ui.shadcn.com/) - MIT License
 - [Unsplash](https://unsplash.com) - Unsplash License
+
+## 🎨 Credits
+
+- **Logo Design**: Wan Lin
