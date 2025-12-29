@@ -4,6 +4,8 @@ import { cors } from 'npm:hono/cors';
 import { logger } from 'npm:hono/logger';
 import { createClient } from 'jsr:@supabase/supabase-js@2';
 import * as kv from './kv_store.ts';
+import * as activityLog from './activity_log.ts';
+import { Actions, extractClientInfo, ActivityCategory } from './activity_log.ts';
 
 const app = new Hono();
 
@@ -32,6 +34,9 @@ const supabaseAnon = createClient(
 
 // User signup
 app.post('/make-server-eeff6ec4/signup', async (c) => {
+  const startTime = Date.now();
+  const clientInfo = extractClientInfo(c);
+  
   try {
     const { email, password, name } = await c.req.json();
 
@@ -44,6 +49,22 @@ app.post('/make-server-eeff6ec4/signup', async (c) => {
 
     if (error) {
       console.log(`Signup error: ${error.message}`);
+      
+      // Log failed signup attempt
+      await activityLog.logActivity({
+        userId: null,
+        userEmail: email,
+        userName: name,
+        ...clientInfo,
+        action: Actions.SIGNUP,
+        category: 'auth',
+        details: { attemptedEmail: email },
+        statusCode: 400,
+        success: false,
+        errorMessage: error.message,
+        duration: Date.now() - startTime,
+      });
+      
       return c.json({ error: error.message }, 400);
     }
 
@@ -59,16 +80,49 @@ app.post('/make-server-eeff6ec4/signup', async (c) => {
     
     await kv.set(profileKey, initialProfile);
     console.log(`✅ Created profile for user ${data.user.id}`);
+    
+    // Log successful signup
+    await activityLog.logActivity({
+      userId: data.user.id,
+      userEmail: data.user.email,
+      userName: name,
+      ...clientInfo,
+      action: Actions.SIGNUP,
+      category: 'auth',
+      details: { profileCreated: true },
+      statusCode: 200,
+      success: true,
+      duration: Date.now() - startTime,
+    });
 
     return c.json({ user: data.user });
   } catch (error) {
     console.log(`Signup exception: ${error}`);
+    
+    // Log exception
+    await activityLog.logActivity({
+      userId: null,
+      userEmail: null,
+      userName: null,
+      ...clientInfo,
+      action: Actions.SIGNUP,
+      category: 'auth',
+      details: {},
+      statusCode: 500,
+      success: false,
+      errorMessage: String(error),
+      duration: Date.now() - startTime,
+    });
+    
     return c.json({ error: 'Signup failed' }, 500);
   }
 });
 
 // Get user sessions
 app.get('/make-server-eeff6ec4/sessions/:userId', async (c) => {
+  const startTime = Date.now();
+  const clientInfo = extractClientInfo(c);
+  
   try {
     const authHeader = c.req.header('Authorization');
     console.log('Get sessions - Auth header present:', !!authHeader);
@@ -77,6 +131,21 @@ app.get('/make-server-eeff6ec4/sessions/:userId', async (c) => {
     
     if (!accessToken) {
       console.log('No access token provided');
+      
+      await activityLog.logActivity({
+        userId: null,
+        userEmail: null,
+        userName: null,
+        ...clientInfo,
+        action: Actions.SESSION_LIST,
+        category: 'session',
+        details: {},
+        statusCode: 401,
+        success: false,
+        errorMessage: 'No token provided',
+        duration: Date.now() - startTime,
+      });
+      
       return c.json({ error: 'Unauthorized - No token' }, 401);
     }
 
@@ -86,6 +155,21 @@ app.get('/make-server-eeff6ec4/sessions/:userId', async (c) => {
     if (authError) {
       console.log(`Get sessions auth error: ${authError.message}, Status: ${authError.status}`);
       console.log('Full auth error:', JSON.stringify(authError));
+      
+      await activityLog.logActivity({
+        userId: null,
+        userEmail: null,
+        userName: null,
+        ...clientInfo,
+        action: Actions.SESSION_LIST,
+        category: 'session',
+        details: {},
+        statusCode: 401,
+        success: false,
+        errorMessage: authError.message,
+        duration: Date.now() - startTime,
+      });
+      
       return c.json({ error: 'Unauthorized' }, 401);
     }
 
@@ -103,6 +187,20 @@ app.get('/make-server-eeff6ec4/sessions/:userId', async (c) => {
     const sessions = sessionsData || [];
     
     console.log(`Found ${sessions?.length || 0} sessions for user ${userId}`);
+    
+    // Log successful session list retrieval
+    await activityLog.logActivity({
+      userId: user.id,
+      userEmail: user.email,
+      userName: user.user_metadata?.name,
+      ...clientInfo,
+      action: Actions.SESSION_LIST,
+      category: 'session',
+      details: { sessionCount: sessions?.length || 0 },
+      statusCode: 200,
+      success: true,
+      duration: Date.now() - startTime,
+    });
 
     return c.json({ sessions });
   } catch (error) {
@@ -113,6 +211,9 @@ app.get('/make-server-eeff6ec4/sessions/:userId', async (c) => {
 
 // Save a focus session
 app.post('/make-server-eeff6ec4/sessions', async (c) => {
+  const startTime = Date.now();
+  const clientInfo = extractClientInfo(c);
+  
   try {
     const authHeader = c.req.header('Authorization');
     console.log('=== SAVE SESSION DEBUG ===');
@@ -123,6 +224,21 @@ app.post('/make-server-eeff6ec4/sessions', async (c) => {
     
     if (!accessToken) {
       console.log('❌ No access token provided');
+      
+      await activityLog.logActivity({
+        userId: null,
+        userEmail: null,
+        userName: null,
+        ...clientInfo,
+        action: Actions.SESSION_COMPLETE,
+        category: 'session',
+        details: {},
+        statusCode: 401,
+        success: false,
+        errorMessage: 'No token provided',
+        duration: Date.now() - startTime,
+      });
+      
       return c.json({ error: 'Unauthorized - No token' }, 401);
     }
 
@@ -137,6 +253,21 @@ app.post('/make-server-eeff6ec4/sessions', async (c) => {
       console.log('Auth error status:', authError.status);
       console.log('Auth error code:', authError.code);
       console.log('Full auth error:', JSON.stringify(authError));
+      
+      await activityLog.logActivity({
+        userId: null,
+        userEmail: null,
+        userName: null,
+        ...clientInfo,
+        action: Actions.SESSION_COMPLETE,
+        category: 'session',
+        details: {},
+        statusCode: 401,
+        success: false,
+        errorMessage: authError.message,
+        duration: Date.now() - startTime,
+      });
+      
       return c.json({ code: 401, message: authError.message }, 401);
     }
 
@@ -157,6 +288,29 @@ app.post('/make-server-eeff6ec4/sessions', async (c) => {
     await kv.set(sessionsKey, updatedSessions);
     
     console.log(`✅ Session saved successfully. Total sessions: ${updatedSessions.length}`);
+    
+    // Determine if session was successful or failed based on session data
+    const sessionAction = newSession.completed ? Actions.SESSION_COMPLETE : Actions.SESSION_FAIL;
+    
+    // Log session save
+    await activityLog.logActivity({
+      userId: user.id,
+      userEmail: user.email,
+      userName: user.user_metadata?.name,
+      ...clientInfo,
+      action: sessionAction,
+      category: 'session',
+      details: {
+        duration: newSession.duration,
+        plantId: newSession.plantId,
+        topic: newSession.topic,
+        completed: newSession.completed,
+        totalSessions: updatedSessions.length,
+      },
+      statusCode: 200,
+      success: true,
+      duration: Date.now() - startTime,
+    });
 
     return c.json({ success: true, session: newSession });
   } catch (error) {
@@ -167,6 +321,9 @@ app.post('/make-server-eeff6ec4/sessions', async (c) => {
 
 // Get user profile
 app.get('/make-server-eeff6ec4/profile', async (c) => {
+  const startTime = Date.now();
+  const clientInfo = extractClientInfo(c);
+  
   try {
     const authHeader = c.req.header('Authorization');
     console.log('Get profile - Auth header present:', !!authHeader);
@@ -195,6 +352,20 @@ app.get('/make-server-eeff6ec4/profile', async (c) => {
     console.log(`✅ Token validated. Fetching profile for user: ${user.id}`);
     const profileKey = `profile:${user.id}`;
     const profile = await kv.get(profileKey);
+    
+    // Log profile view
+    await activityLog.logActivity({
+      userId: user.id,
+      userEmail: user.email,
+      userName: user.user_metadata?.name,
+      ...clientInfo,
+      action: Actions.PROFILE_VIEW,
+      category: 'profile',
+      details: {},
+      statusCode: 200,
+      success: true,
+      duration: Date.now() - startTime,
+    });
 
     return c.json({ 
       profile: profile || {
@@ -213,6 +384,9 @@ app.get('/make-server-eeff6ec4/profile', async (c) => {
 
 // Update user profile
 app.put('/make-server-eeff6ec4/profile', async (c) => {
+  const startTime = Date.now();
+  const clientInfo = extractClientInfo(c);
+  
   try {
     const authHeader = c.req.header('Authorization');
     console.log('=== UPDATE PROFILE DEBUG ===');
@@ -255,6 +429,35 @@ app.put('/make-server-eeff6ec4/profile', async (c) => {
 
     await kv.set(profileKey, updatedProfile);
     console.log(`✅ Profile updated successfully`);
+    
+    // Determine specific action based on what was updated
+    let action = Actions.PROFILE_UPDATE;
+    let category: ActivityCategory = 'profile';
+    
+    if (updates.whitelist) {
+      action = Actions.WHITELIST_UPDATE;
+      category = 'whitelist';
+    } else if (updates.unlockedPlants) {
+      action = Actions.PLANT_UNLOCK;
+      category = 'plant';
+    }
+    
+    // Log profile update
+    await activityLog.logActivity({
+      userId: user.id,
+      userEmail: user.email,
+      userName: user.user_metadata?.name,
+      ...clientInfo,
+      action,
+      category,
+      details: {
+        updatedFields: Object.keys(updates),
+        ...updates,
+      },
+      statusCode: 200,
+      success: true,
+      duration: Date.now() - startTime,
+    });
 
     return c.json({ profile: updatedProfile });
   } catch (error) {
@@ -266,6 +469,213 @@ app.put('/make-server-eeff6ec4/profile', async (c) => {
 // Health check
 app.get('/make-server-eeff6ec4/health', (c) => {
   return c.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// ================== ACTIVITY LOGS API ==================
+
+// Get recent activity logs (admin endpoint)
+app.get('/make-server-eeff6ec4/logs', async (c) => {
+  const startTime = Date.now();
+  const clientInfo = extractClientInfo(c);
+  
+  try {
+    const authHeader = c.req.header('Authorization');
+    const accessToken = authHeader?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'Unauthorized - No token' }, 401);
+    }
+
+    const { data: { user }, error: authError } = await supabaseAnon.auth.getUser(accessToken);
+
+    if (authError || !user) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const limit = parseInt(c.req.query('limit') || '100');
+    const logs = await activityLog.getRecentLogs(limit);
+    
+    // Log this admin action
+    await activityLog.logActivity({
+      userId: user.id,
+      userEmail: user.email,
+      userName: user.user_metadata?.name,
+      ...clientInfo,
+      action: Actions.LOGS_VIEW,
+      category: 'admin',
+      details: { limit, resultCount: logs.length },
+      statusCode: 200,
+      success: true,
+      duration: Date.now() - startTime,
+    });
+
+    return c.json({ logs });
+  } catch (error) {
+    console.log(`Get logs exception: ${error}`);
+    return c.json({ error: 'Failed to fetch logs' }, 500);
+  }
+});
+
+// Get activity statistics
+app.get('/make-server-eeff6ec4/logs/stats', async (c) => {
+  const startTime = Date.now();
+  const clientInfo = extractClientInfo(c);
+  
+  try {
+    const authHeader = c.req.header('Authorization');
+    const accessToken = authHeader?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'Unauthorized - No token' }, 401);
+    }
+
+    const { data: { user }, error: authError } = await supabaseAnon.auth.getUser(accessToken);
+
+    if (authError || !user) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const userId = c.req.query('userId');
+    const startTime2 = c.req.query('startTime');
+    const endTime = c.req.query('endTime');
+    
+    const stats = await activityLog.getActivityStats(userId, startTime2, endTime);
+
+    return c.json({ stats });
+  } catch (error) {
+    console.log(`Get stats exception: ${error}`);
+    return c.json({ error: 'Failed to fetch stats' }, 500);
+  }
+});
+
+// Search activity logs with filters
+app.post('/make-server-eeff6ec4/logs/search', async (c) => {
+  const startTime = Date.now();
+  const clientInfo = extractClientInfo(c);
+  
+  try {
+    const authHeader = c.req.header('Authorization');
+    const accessToken = authHeader?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'Unauthorized - No token' }, 401);
+    }
+
+    const { data: { user }, error: authError } = await supabaseAnon.auth.getUser(accessToken);
+
+    if (authError || !user) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const filters = await c.req.json();
+    const logs = await activityLog.searchLogs(filters);
+    
+    // Log this search action
+    await activityLog.logActivity({
+      userId: user.id,
+      userEmail: user.email,
+      userName: user.user_metadata?.name,
+      ...clientInfo,
+      action: Actions.LOGS_VIEW,
+      category: 'admin',
+      details: { filters, resultCount: logs.length },
+      statusCode: 200,
+      success: true,
+      duration: Date.now() - startTime,
+    });
+
+    return c.json({ logs });
+  } catch (error) {
+    console.log(`Search logs exception: ${error}`);
+    return c.json({ error: 'Failed to search logs' }, 500);
+  }
+});
+
+// Get logs for a specific user
+app.get('/make-server-eeff6ec4/logs/user/:userId', async (c) => {
+  try {
+    const authHeader = c.req.header('Authorization');
+    const accessToken = authHeader?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'Unauthorized - No token' }, 401);
+    }
+
+    const { data: { user }, error: authError } = await supabaseAnon.auth.getUser(accessToken);
+
+    if (authError || !user) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const targetUserId = c.req.param('userId');
+    const limit = parseInt(c.req.query('limit') || '100');
+    const logs = await activityLog.getLogsByUser(targetUserId, limit);
+
+    return c.json({ logs });
+  } catch (error) {
+    console.log(`Get user logs exception: ${error}`);
+    return c.json({ error: 'Failed to fetch user logs' }, 500);
+  }
+});
+
+// Get logs by category
+app.get('/make-server-eeff6ec4/logs/category/:category', async (c) => {
+  try {
+    const authHeader = c.req.header('Authorization');
+    const accessToken = authHeader?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'Unauthorized - No token' }, 401);
+    }
+
+    const { data: { user }, error: authError } = await supabaseAnon.auth.getUser(accessToken);
+
+    if (authError || !user) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const category = c.req.param('category') as activityLog.ActivityCategory;
+    const limit = parseInt(c.req.query('limit') || '100');
+    const logs = await activityLog.getLogsByCategory(category, limit);
+
+    return c.json({ logs });
+  } catch (error) {
+    console.log(`Get category logs exception: ${error}`);
+    return c.json({ error: 'Failed to fetch category logs' }, 500);
+  }
+});
+
+// Cleanup old logs (admin maintenance endpoint)
+app.delete('/make-server-eeff6ec4/logs/cleanup', async (c) => {
+  const startTime = Date.now();
+  const clientInfo = extractClientInfo(c);
+  
+  try {
+    const authHeader = c.req.header('Authorization');
+    const accessToken = authHeader?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'Unauthorized - No token' }, 401);
+    }
+
+    const { data: { user }, error: authError } = await supabaseAnon.auth.getUser(accessToken);
+
+    if (authError || !user) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const olderThanDays = parseInt(c.req.query('days') || '30');
+    const deletedCount = await activityLog.deleteOldLogs(olderThanDays);
+
+    return c.json({ 
+      success: true, 
+      deletedCount,
+      message: `Deleted ${deletedCount} logs older than ${olderThanDays} days`
+    });
+  } catch (error) {
+    console.log(`Cleanup logs exception: ${error}`);
+    return c.json({ error: 'Failed to cleanup logs' }, 500);
+  }
 });
 
 // Migration endpoint - migrate old session structure to new structure
