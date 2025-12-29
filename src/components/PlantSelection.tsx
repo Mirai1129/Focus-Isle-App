@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {plants, useFocus} from '../context/FocusContext';
-import {ChevronRight, Lock, Sparkles} from 'lucide-react';
+import {ArrowLeft, ChevronRight, Lock, Sparkles} from 'lucide-react';
 import {useTranslation} from 'react-i18next';
 
 const prizeKeys = [
@@ -44,9 +44,16 @@ export default function PlantSelection() {
 
     return (
         <div className="phone-screen">
+            <div className="page-header-bar">
+                <button className="btn-icon" onClick={() => navigate('/topic')}>
+                    <ArrowLeft size={24} strokeWidth={1.5}/>
+                </button>
+                <h2>{t('focus.select_plant')}</h2>
+                <div style={{width: 40}}></div>
+            </div>
+
             <div className="page-content">
                 <div className="page-header">
-                    <h1>{t('focus.select_plant')}</h1>
                     <p>{t('plants.title')}</p>
                 </div>
 

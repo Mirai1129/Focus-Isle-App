@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useFocus} from '../context/FocusContext';
-import {ChevronRight, Plus, X} from 'lucide-react';
+import {ArrowLeft, ChevronRight, Plus, X} from 'lucide-react';
 import {useTranslation} from 'react-i18next';
 
 const commonApps = [
@@ -44,9 +44,16 @@ export default function WhitelistManager() {
 
     return (
         <div className="phone-screen">
+            <div className="page-header-bar">
+                <button className="btn-icon" onClick={() => navigate('/plant-selection')}>
+                    <ArrowLeft size={24} strokeWidth={1.5}/>
+                </button>
+                <h2>{t('whitelist.title')}</h2>
+                <div style={{width: 40}}></div>
+            </div>
+
             <div className="page-content">
                 <div className="page-header">
-                    <h1>{t('whitelist.title')}</h1>
                     <p>{t('whitelist.description')}</p>
                 </div>
 

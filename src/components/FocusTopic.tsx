@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useFocus} from '../context/FocusContext';
-import {BookOpen, Brain, Briefcase, ChevronRight, Heart} from 'lucide-react';
+import {ArrowLeft, BookOpen, Brain, Briefcase, ChevronRight, Heart} from 'lucide-react';
 import {useTranslation} from 'react-i18next';
 
 const categories = [
@@ -50,9 +50,16 @@ export default function FocusTopic() {
 
     return (
         <div className="phone-screen">
+            <div className="page-header-bar">
+                <button className="btn-icon" onClick={() => navigate('/dashboard')}>
+                    <ArrowLeft size={24} strokeWidth={1.5}/>
+                </button>
+                <h2>{t('focus.topic_title')}</h2>
+                <div style={{width: 40}}></div>
+            </div>
+
             <div className="page-content">
                 <div className="page-header">
-                    <h1>{t('focus.topic_title')}</h1>
                     <p>{t('focus.category')}</p>
                 </div>
 
