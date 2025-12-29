@@ -120,6 +120,8 @@ See [DOCUMENTATION.md](DOCUMENTATION.md) for:
 
 ## 📄 License
 
+MIT License - see [LICENSE](LICENSE) for details.
+
 This project uses components from:
 
 - [shadcn/ui](https://ui.shadcn.com/) - MIT License
