@@ -1,0 +1,157 @@
+{
+  "welcome": {
+    "title_cn": "專注島",
+    "title_en": "Focus Isle",
+    "description": "Time flows like sand. Focus grows your island.",
+    "begin": "Begin Your Journey"
+  },
+  "auth": {
+    "welcome_back": "Welcome Back",
+    "create_account": "Create Account",
+    "island_awaits": "Your island awaits",
+    "your_name": "Your name",
+    "email": "Email address",
+    "password": "Password",
+    "sign_in": "Sign In",
+    "sign_up": "Sign Up",
+    "no_account": "Don't have an account?",
+    "have_account": "Already have an account?",
+    "signing_in": "Signing in...",
+    "creating_account": "Creating account..."
+  },
+  "dashboard": {
+    "welcome_back": "Welcome back, {{name}}",
+    "island_growing": "Your focus island is growing",
+    "sessions": "Sessions",
+    "success_rate": "Success Rate",
+    "minutes": "Minutes",
+    "plants": "Plants",
+    "start_focus": "Start Focus Session",
+    "view_history": "View History",
+    "analytics": "Analytics",
+    "plant_collection": "Plant Collection"
+  },
+  "focus": {
+    "topic_title": "What will you focus on?",
+    "topic_placeholder": "Enter your focus topic...",
+    "topic_or_goal": "topic or goal",
+    "category": "Category",
+    "categories": {
+      "work": "Work",
+      "study": "Study",
+      "exercise": "Exercise",
+      "meditation": "Meditation",
+      "reading": "Reading",
+      "creative": "Creative",
+      "other": "Other"
+    },
+    "select_plant": "Select a Plant to Grow",
+    "available_plants": "Available Plants",
+    "reward_upon_success": "Reward Upon Success",
+    "prizes": {
+      "5_min_break": "5 min break",
+      "10_min_break": "10 min break",
+      "coffee_break": "Coffee break",
+      "snack_time": "Snack time",
+      "watch_video": "Watch a video",
+      "social_media": "Social media",
+      "game_time": "Game time",
+      "pure_focus": "None - pure focus"
+    },
+    "duration": "Duration",
+    "minutes": "minutes",
+    "start_session": "Start Focus Session",
+    "continue": "Continue",
+    "back": "Back"
+  },
+  "timer": {
+    "growing": "Growing",
+    "stay_focused": "Stay focused to help your plant grow",
+    "time_remaining": "Time Remaining",
+    "give_up": "Give Up",
+    "end_early": "End Session Early"
+  },
+  "success": {
+    "congratulations": "Congratulations!",
+    "plant_grown": "Your {{plant}} has grown!",
+    "session_complete": "Focus session completed successfully",
+    "focused_for": "You focused for {{minutes}} minutes",
+    "back_to_dashboard": "Back to Dashboard",
+    "start_another": "Start Another Session"
+  },
+  "failed": {
+    "session_ended": "Session Ended",
+    "plant_wilted": "Your plant wilted",
+    "try_again": "Don't give up! Try again with a shorter session.",
+    "back_to_dashboard": "Back to Dashboard",
+    "try_again_btn": "Try Again"
+  },
+  "history": {
+    "title": "Focus History",
+    "no_sessions": "No sessions yet",
+    "start_first": "Start your first focus session!",
+    "successful": "Successful",
+    "failed": "Failed",
+    "duration": "{{minutes}} min"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "this_week": "This Week",
+    "total_time": "Total Focus Time",
+    "total_minutes": "Total Minutes",
+    "hours": "hours",
+    "avg_session": "Avg. Session",
+    "best_streak": "Best Streak",
+    "day_streak": "Day Streak",
+    "success_rate": "Success Rate",
+    "days": "days",
+    "focus_by_category": "Focus by Category",
+    "weekly_progress": "Weekly Progress",
+    "last_7_days": "Last 7 Days",
+    "time_by_category": "Time by Category",
+    "no_data": "No data yet",
+    "complete_sessions": "Complete focus sessions to see your analytics"
+  },
+  "plants": {
+    "title": "Plant Collection",
+    "unlocked": "{{count}} / {{total}} Unlocked",
+    "unlocked_of": "{{count}} of {{total}} unlocked",
+    "common": "Common",
+    "rare": "Rare",
+    "epic": "Epic",
+    "legendary": "Legendary",
+    "locked": "Locked",
+    "growth_time": "{{minutes}} min to grow",
+    "grown": "Grown",
+    "total": "Total",
+    "unlock_hint": "Complete more sessions to unlock"
+  },
+  "whitelist": {
+    "title": "App Whitelist",
+    "description": "Select apps you can use during focus sessions",
+    "common_apps": "Common Apps",
+    "add_custom": "Add Custom App",
+    "add_app": "Add app...",
+    "selected_apps": "Selected Apps ({{count}})",
+    "continue": "Continue"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "english": "English",
+    "chinese": "繁體中文",
+    "notifications": "Notifications",
+    "sound": "Sound Effects",
+    "sign_out": "Sign Out"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "account": "Account"
+  }
+}

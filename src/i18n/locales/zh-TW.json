@@ -1,0 +1,157 @@
+{
+  "welcome": {
+    "title_cn": "專注島",
+    "title_en": "Focus Isle",
+    "description": "時間如沙流逝，專注使島嶼成長。",
+    "begin": "開始你的旅程"
+  },
+  "auth": {
+    "welcome_back": "歡迎回來",
+    "create_account": "建立帳戶",
+    "island_awaits": "你的島嶼正等待著你",
+    "your_name": "你的名字",
+    "email": "電子郵件",
+    "password": "密碼",
+    "sign_in": "登入",
+    "sign_up": "註冊",
+    "no_account": "還沒有帳戶？",
+    "have_account": "已經有帳戶了？",
+    "signing_in": "登入中...",
+    "creating_account": "建立帳戶中..."
+  },
+  "dashboard": {
+    "welcome_back": "歡迎回來，{{name}}",
+    "island_growing": "你的專注島正在成長",
+    "sessions": "專注次數",
+    "success_rate": "成功率",
+    "minutes": "分鐘",
+    "plants": "植物",
+    "start_focus": "開始專注",
+    "view_history": "查看歷史",
+    "analytics": "數據分析",
+    "plant_collection": "植物收藏"
+  },
+  "focus": {
+    "topic_title": "你要專注什麼？",
+    "topic_placeholder": "輸入你的專注主題...",
+    "topic_or_goal": "主題或目標",
+    "category": "類別",
+    "categories": {
+      "work": "工作",
+      "study": "學習",
+      "exercise": "運動",
+      "meditation": "冥想",
+      "reading": "閱讀",
+      "creative": "創作",
+      "other": "其他"
+    },
+    "select_plant": "選擇要種植的植物",
+    "available_plants": "可用植物",
+    "reward_upon_success": "成功後的獎勵",
+    "prizes": {
+      "5_min_break": "5 分鐘休息",
+      "10_min_break": "10 分鐘休息",
+      "coffee_break": "嗝杯咖啡",
+      "snack_time": "吃點零食",
+      "watch_video": "看個影片",
+      "social_media": "滑社群",
+      "game_time": "玩遊戲",
+      "pure_focus": "無 - 純粹專注"
+    },
+    "duration": "時長",
+    "minutes": "分鐘",
+    "start_session": "開始專注",
+    "continue": "繼續",
+    "back": "返回"
+  },
+  "timer": {
+    "growing": "成長中",
+    "stay_focused": "保持專注，幫助你的植物成長",
+    "time_remaining": "剩餘時間",
+    "give_up": "放棄",
+    "end_early": "提前結束"
+  },
+  "success": {
+    "congratulations": "恭喜！",
+    "plant_grown": "你的{{plant}}已經長大了！",
+    "session_complete": "專注完成",
+    "focused_for": "你專注了 {{minutes}} 分鐘",
+    "back_to_dashboard": "返回主頁",
+    "start_another": "再來一次"
+  },
+  "failed": {
+    "session_ended": "專注結束",
+    "plant_wilted": "你的植物枯萎了",
+    "try_again": "別灰心！下次試試更短的時間。",
+    "back_to_dashboard": "返回主頁",
+    "try_again_btn": "再試一次"
+  },
+  "history": {
+    "title": "專注歷史",
+    "no_sessions": "還沒有記錄",
+    "start_first": "開始你的第一次專注！",
+    "successful": "成功",
+    "failed": "失敗",
+    "duration": "{{minutes}} 分鐘"
+  },
+  "analytics": {
+    "title": "數據分析",
+    "this_week": "本週",
+    "total_time": "總專注時間",
+    "total_minutes": "總分鐘數",
+    "hours": "小時",
+    "avg_session": "平均時長",
+    "best_streak": "最佳連續",
+    "day_streak": "連續天數",
+    "success_rate": "成功率",
+    "days": "天",
+    "focus_by_category": "類別分佈",
+    "weekly_progress": "每週進度",
+    "last_7_days": "過去 7 天",
+    "time_by_category": "按類別時間",
+    "no_data": "尚無數據",
+    "complete_sessions": "完成專注來查看分析"
+  },
+  "plants": {
+    "title": "植物收藏",
+    "unlocked": "已解鎖 {{count}} / {{total}}",
+    "unlocked_of": "已解鎖 {{count}} / {{total}}",
+    "common": "普通",
+    "rare": "稀有",
+    "epic": "史詩",
+    "legendary": "傳說",
+    "locked": "未解鎖",
+    "growth_time": "{{minutes}} 分鐘成長",
+    "grown": "已種植",
+    "total": "總計",
+    "unlock_hint": "完成更多專注來解鎖"
+  },
+  "whitelist": {
+    "title": "應用白名單",
+    "description": "選擇專注時可以使用的應用",
+    "common_apps": "常用應用",
+    "add_custom": "新增自訂應用",
+    "add_app": "新增應用...",
+    "selected_apps": "已選應用 ({{count}})",
+    "continue": "繼續"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "語言",
+    "english": "English",
+    "chinese": "繁體中文",
+    "notifications": "通知",
+    "sound": "音效",
+    "sign_out": "登出"
+  },
+  "common": {
+    "loading": "載入中...",
+    "error": "發生錯誤",
+    "retry": "重試",
+    "cancel": "取消",
+    "save": "儲存",
+    "delete": "刪除",
+    "confirm": "確認",
+    "account": "帳戶"
+  }
+}
